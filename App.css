@@ -1,0 +1,57 @@
+
+:root{--toss:#3182F6;--toss-deep:#1B64DA;--ink:#191F28;--sub:#6B7684;--line:#E5E8EB;--bg:#F2F4F6;--card:#fff;--live:#EAF2FE;--gr:#0F8A50}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#DDE1E6;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic",sans-serif;color:var(--ink);display:flex;justify-content:center;padding:14px;min-height:100vh}
+.phone{width:100%;max-width:390px;background:var(--bg);border-radius:26px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.18)}
+.nav{background:var(--card);padding:14px 20px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
+.logo{font-size:18px;font-weight:800}.logo b{color:var(--toss)}
+.tag{margin-left:auto;font-size:10px;font-weight:700;color:var(--toss);background:var(--live);padding:3px 8px;border-radius:99px}
+.scroll{height:82vh;max-height:800px;overflow-y:auto;-webkit-overflow-scrolling:touch}.pad{padding:18px 18px 40px}
+.ctrls{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.row{display:flex;gap:8px}
+.fld{flex:1;background:var(--card);border-radius:13px;padding:9px 12px}
+.fld label{display:block;font-size:11px;color:var(--sub);font-weight:700;margin-bottom:2px}
+select,input{border:none;font-size:15px;font-weight:700;color:var(--ink);font-family:inherit;width:100%;outline:none;background:transparent}
+.hero{background:linear-gradient(155deg,#1B64DA,#3182F6);border-radius:22px;padding:22px 22px 20px;color:#fff;margin-bottom:14px}
+.hero .lbl{font-size:13px;font-weight:600;opacity:.9}.hero .lbl b{font-weight:800}
+.hero .big{font-size:38px;font-weight:800;letter-spacing:-1.5px;margin:6px 0 2px;line-height:1;display:flex;align-items:center;min-height:42px}
+.reel{display:inline-block;height:1em;line-height:1;overflow:hidden}
+.reel .col{display:flex;flex-direction:column;transition:transform .82s cubic-bezier(.16,.84,.44,1)}
+.reel .col span{height:1em;display:flex;align-items:center;justify-content:center}
+.sep{display:inline-block}.unit{font-size:20px;opacity:.92;margin-left:3px;align-self:center}
+@keyframes pop{0%{transform:scale(1);filter:brightness(1)}35%{transform:scale(1.05);filter:brightness(1.35)}100%{transform:scale(1);filter:brightness(1)}}
+.hero .big.pop{animation:pop .6s ease}
+@keyframes vflash{0%{background:rgba(49,130,246,.22)}100%{background:rgba(49,130,246,0)}}
+.hero .sub{font-size:12px;opacity:.85;font-weight:500}
+.brk{background:var(--card);border-radius:16px;padding:6px 4px;margin-bottom:14px}
+.brk .b{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;font-size:14px}
+.brk .b+.b{border-top:1px solid var(--line)}
+.brk .b .k{color:var(--sub);font-weight:600}.brk .b .k b{color:var(--ink);font-weight:700}
+.brk .b .v{font-weight:800;border-radius:7px;padding:2px 7px;animation:vflash .7s ease}
+.sec{font-size:15px;font-weight:800;margin:18px 4px 10px}
+.tl{background:var(--card);border-radius:16px;padding:16px}
+.bars{display:flex;align-items:flex-end;gap:3px;height:90px;margin-bottom:6px}
+.bar{flex:1;background:linear-gradient(180deg,#7FB1FB,#3182F6);border-radius:3px 3px 0 0;min-height:3px}
+.bar.y1{background:linear-gradient(180deg,#A9CBFB,#6BA0F5)}
+.tlx{display:flex;justify-content:space-between;font-size:10px;color:var(--sub);font-weight:600}
+.tlnote{font-size:11.5px;color:var(--sub);margin-top:10px;line-height:1.5}
+.item{background:var(--card);border-radius:14px;padding:13px 15px;margin-bottom:8px}
+.item .ti{font-size:14.5px;font-weight:700;margin-bottom:5px}
+.item .am{font-size:13.5px;font-weight:800;color:var(--toss-deep);margin-bottom:5px}
+.item .am.svc{color:var(--gr);font-weight:700;font-size:12.5px}.item .am.chk{color:var(--sub);font-weight:600;font-size:12.5px}
+.item .meta{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.chip{font-size:10.5px;font-weight:700;color:var(--sub);background:#F1F3F5;padding:3px 8px;border-radius:99px}
+.vb{font-size:9.5px;font-weight:800;padding:3px 7px;border-radius:99px}
+.vb.ok{color:#0F8A50;background:#E7F7EE}.vb.web{color:#A07410;background:#FFF8E8}.vb.gu{color:#C0392B;background:#FDECEA}.vb.auto{color:#7B8794;background:#F1F3F5}
+.item a{margin-left:auto;font-size:11px;font-weight:700;color:var(--toss);text-decoration:none}
+.empty{background:#FFF4E5;border:1px solid #FFE8C7;border-radius:12px;padding:14px;font-size:13px;font-weight:600;color:#9A5B00;line-height:1.5}
+.disc{font-size:11px;color:#909AA4;line-height:1.6;margin-top:16px;padding:0 4px}.disc b{color:#6B7684}
+
+
+/* ===== 앱인토스 웹뷰 풀스크린 오버라이드 ===== */
+html,body{margin:0;height:100%}
+body{background:#fff!important;padding:0!important;display:block!important;min-height:100%}
+#root,.ait-root{height:100%}
+.phone{max-width:480px!important;width:100%!important;margin:0 auto!important;border-radius:0!important;box-shadow:none!important;min-height:100dvh}
+.nav{position:sticky;top:0;z-index:10}
+.scroll{height:auto!important;max-height:none!important;overflow:visible!important}
