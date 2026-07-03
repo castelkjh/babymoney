@@ -1,0 +1,12 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.granite/
+
+# backups
+*.bak
+
+# os
+.DS_Store
