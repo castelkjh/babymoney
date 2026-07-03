@@ -6,7 +6,7 @@
 //  app-runtime의 playAd()가 mock 카운트다운 대신 실제 토스 광고를 쓰게 함.
 //  (앱 로직은 1도 안 건드림 — 전역값만 채워주는 역할)
 // ────────────────────────────────────────────────────────────────
-import { loadFullScreenAd, showFullScreenAd, share, getTossShareLink, Analytics } from '@apps-in-toss/web-framework';
+import { loadFullScreenAd, showFullScreenAd, share, getTossShareLink, Analytics, requestNotificationAgreement } from '@apps-in-toss/web-framework';
 
 const w = window as any;
 
@@ -26,6 +26,18 @@ w.__ait_showFullScreenAd = showFullScreenAd;
 // 1-2) 공유 함수도 전역에 연결 (공유 카드 버튼이 사용)
 w.__ait_share = share;
 w.__ait_getTossShareLink = getTossShareLink;
+
+// 3) 알림 동의 요청(옵트인) 연결 — 카드의 "알림 받기" 버튼이 사용
+//    __ait_requestConsent(templateCode, onResult) → onResult('newAgreement'|'alreadyAgreed'|'agreementRejected'|'error')
+w.__ait_requestConsent = (templateCode: string, onResult?: (type: string) => void) => {
+  try {
+    return requestNotificationAgreement({
+      options: { templateCode },
+      onEvent: (r: { type: string }) => { if (onResult) onResult(r && r.type); },
+      onError: (e: unknown) => { console.error(e); if (onResult) onResult('error'); },
+    });
+  } catch (e) { console.error(e); if (onResult) onResult('error'); return () => {}; }
+};
 
 // 2) 광고 그룹 ID  (콘솔 > 인앱 광고 > 광고 그룹 > "진단결과_리워드광고")
 //    ※ 운영 ID. 구글 반영 완료(최대 2시간) 후 실제 광고가 노출됨.

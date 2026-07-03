@@ -172,7 +172,7 @@ select,input{border:none;font-size:13.5px;font-weight:700;color:var(--ink);font-
 .ckmeta a{font-size:11.5px;font-weight:700;color:var(--toss);text-decoration:none}
 .sharebtn{width:100%;border:none;background:var(--toss);color:#fff;font-family:inherit;font-size:14px;font-weight:800;padding:14px;border-radius:13px;margin-bottom:12px;cursor:pointer}
 .sharebtn:active{opacity:.85}
-</style><script type="module" src="/src/ait-bridge.ts"></script></head><body><div class="phone" id="phone">
+.noticard{background:var(--card);border-radius:14px;padding:14px 16px;margin-top:14px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 3px rgba(0,0,0,.05)}.noticard .nc-txt{flex:1;min-width:0}.noticard .nc-title{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:2px}.noticard .nc-sub{font-size:12px;color:var(--sub);line-height:1.4}.noticard .nc-btn{flex-shrink:0;border:none;background:var(--toss);color:#fff;font-family:inherit;font-size:13px;font-weight:800;padding:9px 14px;border-radius:10px;cursor:pointer}.noticard.done{background:#EAF2FE}.noticard.done .nc-btn{background:#9DBFF0}</style><script type="module" src="/src/ait-bridge.ts"></script></head><body><div class="phone" id="phone">
 <div class="nav"><span class="logo">아기<b>머니</b></span><span class="tag">실데이터</span></div>
 <div class="scroll" id="scroll"><div class="pad"><div class="prof" id="prof"></div><div id="view"></div></div></div>
 <div class="tabbar">
@@ -187,7 +187,7 @@ const DATA={"서울특별시":{"종로구":[{"p":"출산장려 건강보험료 �
 const manW=m=>m.toLocaleString('ko-KR')+'만원';
 const won=n=>n>=10000?(n/10000).toLocaleString('ko-KR')+'만원':n.toLocaleString('ko-KR')+'원';
 const ORD={1:'첫째',2:'둘째',3:'셋째',4:'넷째',5:'다섯째'};
-const SUDOGWON=['서울특별시','경기도','인천광역시'];
+const SUDOGWON=['서울특별시','경기도','인천광역시'];const ALARM_TEMPLATE='';/* 검토 통과 후 여기에 발송코드(예: babymoney-subsidy-time) 입력 */function askAlarm(){var card=document.getElementById('noticard');if(!ALARM_TEMPLATE||!window.__ait_requestConsent){if(card){var sub=card.querySelector('.nc-sub');if(sub)sub.textContent='알림 기능을 준비 중이에요. 곧 만나요.';}return;}window.__ait_log&&window.__ait_log('alarm_request',{});window.__ait_requestConsent(ALARM_TEMPLATE,function(type){if(type==='newAgreement'||type==='alreadyAgreed'){window.__ait_log&&window.__ait_log('alarm_agreed',{type:type});if(card){card.classList.add('done');var t=card.querySelector('.nc-title'),s=card.querySelector('.nc-sub'),b=card.querySelector('.nc-btn');if(t)t.textContent='알림 신청 완료';if(s)s.textContent='신청 시기가 되면 알려드릴게요.';if(b)b.textContent='신청됨';}}else if(type==='agreementRejected'){window.__ait_log&&window.__ait_log('alarm_rejected',{});}});}
 const VB={'공식확인':['ok','✓ 공식확인'],'웹확인':['web','🔎 웹확인'],'구청확인':['gu','📞 구청확인']};
 const $=s=>document.querySelector(s);
 let S={birth:'',order:1,kids:1,job:'emp',sido:'',sgg:'',tab:'main',missRevealed:false,done:{},income:null,asset:null,house:null,loanRevealed:false,localRevealed:false,noHouse:false};
@@ -228,7 +228,7 @@ function renderMain(){
    <div class="sec">📅 0~24개월 현금 흐름</div>
    <div class="tl"><div class="chart"><div class="yax"><span>120만</span><span>80만</span><span>40만</span><span>0</span></div><div class="plot"><div class="grid"><i></i><i></i><i></i><i></i></div><div class="bars">${bars}</div></div></div><div class="tlx" style="margin-left:36px"><span>출생</span><span>12개월</span><span>24개월</span></div><div class="tlnote">0~11개월 매월 <b>${100+c.monthly}만원</b>, 12~23개월 매월 <b>${50+c.monthly}만원</b> · 아동수당 만 9세까지(2026 확대) · 비수도권 10.5만·인구감소지역 11~13만</div></div>
    <div class="sec">🏘️ 우리 동네 지자체 지원 <span class="cnt">${recs.length}개</span></div><div id="dlist"></div>
-   <div class="disc">※ 중앙 지원금 2026 기준 자동계산(부모급여 1,800만+아동수당 만9세확대). 지자체는 보조금24 자동수집+부산 공식 담당부서 확인(2026.4). 최종 확인은 정부24·구청.</div>`;
+   <div class="disc">※ 중앙 지원금 2026 기준 자동계산(부모급여 1,800만+아동수당 만9세확대). 지자체는 보조금24 자동수집+부산 공식 담당부서 확인(2026.4). 최종 확인은 정부24·구청.</div><div class="noticard" id="noticard"><div class="nc-txt"><div class="nc-title">🔔 지원금 신청 시기 알림</div><div class="nc-sub">신청 기간이 시작되면 알려드려요.</div></div><button class="nc-btn" onclick="askAlarm()">알림 받기</button></div>`;
   rollNumber($('#total'),tot);
   const dl=$('#dlist');
   if(!S.sido||!S.sgg)dl.innerHTML='<div class="empty">시·도·시·군·구를 선택하면 우리 동네 지원이 떠요.</div>';else if(!recs.length)dl.innerHTML='<div class="empty">자동수집된 지자체 사업이 없어요. 구청·정부24 확인 권장.</div>';
