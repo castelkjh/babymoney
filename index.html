@@ -310,7 +310,7 @@ function drawMiss(){
   const sum=elig.filter(i=>!S.done[i.id]).reduce((s,i)=>s+i.amt,0);rollNumber($('#msum'),sum);
 }
 function tog(id){S.done[id]=!S.done[id];drawMiss();}
-function watchAd(){playAd(()=>{S.missRevealed=true;renderMiss();});}
+function watchAd(){playAd(()=>{S.missRevealed=true;renderMiss();},'miss');}
 
 const CYC=20,BASE=100;
 function rollNumber(el,man){
@@ -332,14 +332,14 @@ function rollNumber(el,man){
 }
 function loanVal(id){const e=$('#'+id);if(!e)return null;const t=(e.value||'').replace(/[^0-9]/g,'');return t===''?null:parseInt(t,10);}
 function estRate(inc){if(inc==null)return null;if(inc<=2000)return 1.8;if(inc<=4000)return 2.1;if(inc<=6000)return 2.5;if(inc<=8500)return 3.1;if(inc<=13000)return 3.95;return null;}
-function playAd(cb){
+function playAd(cb,src){src=src||'unknown';var LOG=window.__ait_log||function(){},LIMP=window.__ait_logImp||function(){};LOG('ad_request',{src:src});
   var L=window.__ait_loadFullScreenAd,SHOW=window.__ait_showFullScreenAd,GID=window.__BABYMONEY_AD_GID;
-  if(L&&SHOW&&GID){var done=false,fire=function(){if(done)return;done=true;cb();};try{if(L.isSupported&&L.isSupported()!==true){fire();return;}L({options:{adGroupId:GID},onEvent:function(ev){if(ev.type==='loaded'){SHOW({options:{adGroupId:GID},onEvent:function(e){if(e.type==='userEarnedReward')fire();},onError:function(err){console.error(err);fire();}});}},onError:function(err){console.error(err);fire();}});}catch(e){console.error(e);fire();}return;}
-  const ph=$('#phone');const ov=document.createElement('div');ov.className='adov';ov.innerHTML='<div class="adlbl">광고</div><div class="adbox">토스 보상형 광고 영역</div><div class="adcd" id="cd2">3</div>';ph.appendChild(ov);let n=3;const t=setInterval(()=>{n--;if(n<=0){clearInterval(t);if(ov.parentNode)ph.removeChild(ov);cb();}else{const c=$('#cd2');if(c)c.textContent=n;}},1000);
+  if(L&&SHOW&&GID){var done=false,fire=function(reason){if(done)return;done=true;LOG('ad_reveal',{src:src,reason:reason||'reward'});cb();};try{if(L.isSupported&&L.isSupported()!==true){LOG('ad_unsupported',{src:src});fire('unsupported');return;}LOG('ad_load_start',{src:src});L({options:{adGroupId:GID},onEvent:function(ev){if(ev.type==='loaded'){LOG('ad_loaded',{src:src});SHOW({options:{adGroupId:GID},onEvent:function(e){LOG('ad_show_event',{src:src,type:e&&e.type});if(e.type==='userEarnedReward'){LIMP('ad_impression',{src:src});fire('reward');}},onError:function(err){LOG('ad_show_error',{src:src});console.error(err);fire('show_error');}});}},onError:function(err){LOG('ad_load_error',{src:src});console.error(err);fire('load_error');}});}catch(e){LOG('ad_exception',{src:src});console.error(e);fire('exception');}return;}
+  LOG('ad_sdk_missing',{src:src});const ph=$('#phone');const ov=document.createElement('div');ov.className='adov';ov.innerHTML='<div class="adlbl">광고</div><div class="adbox">토스 보상형 광고 영역</div><div class="adcd" id="cd2">3</div>';ph.appendChild(ov);let n=3;const t=setInterval(()=>{n--;if(n<=0){clearInterval(t);if(ov.parentNode)ph.removeChild(ov);LOG('ad_reveal',{src:src,reason:'mock'});cb();}else{const c=$('#cd2');if(c)c.textContent=n;}},1000);
 }
-function watchLocal(){playAd(()=>{S.localRevealed=true;render();const dl=$('#dlist');if(dl)dl.scrollIntoView({behavior:'smooth',block:'center'});});}
+function watchLocal(){playAd(()=>{S.localRevealed=true;render();const dl=$('#dlist');if(dl)dl.scrollIntoView({behavior:'smooth',block:'center'});},'local');}
 function togHouse(){S.noHouse=!S.noHouse;render();}
-function loanCheck(){const inc=loanVal('li'),hse=loanVal('lh');const w=$('#lwarn');if(inc==null||hse==null){if(w)w.style.display='block';return;}if(w)w.style.display='none';if(S.loanRevealed){renderLoanResult();return;}playAd(()=>{S.loanRevealed=true;const btn=document.querySelector('.lcheckbtn');if(btn)btn.firstChild.textContent='다시 조회하기';renderLoanResult();const r=$('#lresult');if(r)r.scrollIntoView({behavior:'smooth',block:'center'});});}
+function loanCheck(){const inc=loanVal('li'),hse=loanVal('lh');const w=$('#lwarn');if(inc==null||hse==null){if(w)w.style.display='block';return;}if(w)w.style.display='none';if(S.loanRevealed){renderLoanResult();return;}playAd(()=>{S.loanRevealed=true;const btn=document.querySelector('.lcheckbtn');if(btn)btn.firstChild.textContent='다시 조회하기';renderLoanResult();const r=$('#lresult');if(r)r.scrollIntoView({behavior:'smooth',block:'center'});},'loan');}
 function renderLoanResult(){
   const el=$('#lresult');if(!el)return;
   const inc=loanVal('li'),ast=loanVal('la'),hse=loanVal('lh');S.income=inc;S.asset=ast;S.house=hse;

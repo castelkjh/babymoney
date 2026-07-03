@@ -6,9 +6,18 @@
 //  app-runtime의 playAd()가 mock 카운트다운 대신 실제 토스 광고를 쓰게 함.
 //  (앱 로직은 1도 안 건드림 — 전역값만 채워주는 역할)
 // ────────────────────────────────────────────────────────────────
-import { loadFullScreenAd, showFullScreenAd, share, getTossShareLink } from '@apps-in-toss/web-framework';
+import { loadFullScreenAd, showFullScreenAd, share, getTossShareLink, Analytics } from '@apps-in-toss/web-framework';
 
 const w = window as any;
+
+// 0) 분석 이벤트 로거 (토스 콘솔 분석에 집계됨) — 광고 퍼널 계측용
+//    __ait_log(name, params): 일반 이벤트(click) / __ait_logImp: 노출(impression)
+w.__ait_log = (log_name: string, params?: Record<string, unknown>) => {
+  try { Analytics.click(Object.assign({ log_name }, params || {})); } catch (e) { /* dev/preview: 무시 */ }
+};
+w.__ait_logImp = (log_name: string, params?: Record<string, unknown>) => {
+  try { Analytics.impression(Object.assign({ log_name }, params || {})); } catch (e) { /* 무시 */ }
+};
 
 // 1) 광고 로드/표시 함수를 앱이 찾는 전역에 연결
 w.__ait_loadFullScreenAd = loadFullScreenAd;
